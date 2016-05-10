@@ -11,6 +11,7 @@
 #ifndef F_CPU
 #define F_CPU 16000000ul
 #endif
+
 #define MinSpeed -20
 #define MaxSpeed 20
 uint16_t count_m1 = 20;
@@ -51,11 +52,7 @@ int main(void){
 	sei();
 
 	while(1){
-		if(diffVal != 0){
-			PORTB &= ~(1 << PORTB0);
-		}else{
-			PORTB |= (1 << PORTB0);
-		}
+
 		setPwm_Timer1_M2(count_m2 - diffVal);
 	  setPwm_Timer1_M1(count_m1 + diffVal);
 
