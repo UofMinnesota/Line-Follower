@@ -11,6 +11,7 @@
 #ifndef F_CPU
 #define F_CPU 16000000ul
 #endif
+#define incVal 1
 #define MinSpeed -30
 #define MaxSpeed 30
 uint16_t count_m1 = 30;
@@ -50,7 +51,7 @@ int main(void){
 			if(count_m2 < MaxSpeed)
 				count_m2++;*/
 				if(diffVal < MaxSpeed)
-					diffVal ++;
+					diffVal += incVal;
 
 
 		}else if(turn_left){/*
@@ -59,7 +60,7 @@ int main(void){
 			if(count_m1 < MaxSpeed)
 				count_m1++;*/
 				if(diffVal > MinSpeed)
-					diffVal --;
+					diffVal -= incVal;
 		}
 		setPwm_Timer1_M2(count_m2 - diffVal);
 	  setPwm_Timer1_M1(count_m1 + diffVal);
