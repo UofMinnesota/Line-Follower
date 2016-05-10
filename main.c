@@ -11,10 +11,10 @@
 #ifndef F_CPU
 #define F_CPU 16000000ul
 #endif
-#define MinSpeed 4
-#define MaxSpeed 35
-uint16_t count_m1 = 20;
-uint16_t count_m2 = 20;
+#define MinSpeed -30
+#define MaxSpeed 30
+uint16_t count_m1 = 30;
+uint16_t count_m2 = 30;
 
 inline void setupLeds(){
 	DDRC |= (1 << DDC7);	// yellow led
@@ -40,23 +40,30 @@ int main(void){
 	setPwm_Timer1_M2(count_m2);
   setPwm_Timer1_M1(count_m1);
 	sei();
+	int diffVal = 0;
 
 	while(1){
+
 		if(turn_right){
-			if(count_m1 > MinSpeed)
+			/*if(count_m1 > MinSpeed)
 				count_m1--;
 			if(count_m2 < MaxSpeed)
-				count_m2++;
+				count_m2++;*/
+				if(diffVal < MaxSpeed)
+					diffVal ++;
 
-		}else if(turn_left){
+
+		}else if(turn_left){/*
 			if(count_m2 > MinSpeed)
 				count_m2--;
 			if(count_m1 < MaxSpeed)
-				count_m1++;
+				count_m1++;*/
+				if(diffVal > MinSpeed)
+					diffVal --;
 		}
-		setPwm_Timer1_M2(count_m2);
-	  setPwm_Timer1_M1(count_m1);
-		_delay_ms(1000);
+		setPwm_Timer1_M2(count_m2 - diffVal);
+	  setPwm_Timer1_M1(count_m1 + diffVal);
+		_delay_ms(1);
 
 	}
 }
