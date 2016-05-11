@@ -7,6 +7,8 @@
 #include <util/twi.h>
 #include "sensor.h"
 #include "motor.h"
+#include "analog.h"
+
 
 #ifndef F_CPU
 #define F_CPU 16000000ul
@@ -14,9 +16,23 @@
 
 #define MinSpeed -20
 #define MaxSpeed 20
+#define incVar 1
+
 uint16_t count_m1 = 20;
 uint16_t count_m2 = 20;
 int16_t diffVal = 0;
+uint8_t analog_reference = 0;
+
+//void StartADC()
+//{
+	//#if defined(ADCSRA)
+	//// set a2d prescale factor to 128
+	//ADCSRA |= (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);
+//
+	//// enable a2d conversions
+	//ADCSRA |= (1<<ADEN);
+//#endif
+//}
 
 inline void setupLeds(){
 	DDRC |= (1 << DDC7);	// yellow led
@@ -64,7 +80,7 @@ ISR(TIMER0_COMPA_vect){
 		/*turn right*/
 		/*data 1*/
 		if(diffVal > MinSpeed)
-			diffVal--;
+			diffVal-=incVar;
 
 		PORTC |= (1 << PORTC7);
 	}
@@ -72,7 +88,7 @@ ISR(TIMER0_COMPA_vect){
 		/*turn left*/
 		/*data 4*/
 		if(diffVal < MaxSpeed)
-			diffVal++;
+			diffVal+=incVar;
 		PORTD &= ~(1 << PORTD5);
 	}
 	else{ /* in line */
